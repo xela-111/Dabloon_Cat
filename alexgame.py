@@ -16,120 +16,140 @@ from room import Location
 from Player import Player
 
 def clear():
-	if name =='nt':
-		_ = system('cls')
-	else:
-		_ = system('clear')
+        if name =='nt':
+                _ = system('cls')
+        else:
+                _ = system('clear')
 
 def startingscreen():
-	gamemode=input('Please choose your path: If Peaceful, type 1 and if Non-peaceful type 2. ')
-	if gamemode=='1':
-	 	peacefulgame()
-	elif gamemode=='2':
-		print('This gamemode is still in the works! Please wait patiently.')
-		quit() 
-	else:
-		print('This is not a viable answer. Please retry!')
-		sleep(3)
-		startingscreen()
+        gamemode=input('Please choose your path: If Peaceful, type 1 and if Non-peaceful type 2. ')
+        if gamemode=='1':
+                peacefulgame()
+        elif gamemode=='2':
+                print('This gamemode is still in the works! Please wait patiently.')
+                quit() 
+        else:
+                print('This is not a viable answer. Please retry!')
+                sleep(3)
+                startingscreen()
 
 def createplayer():
-	player = Player(username, 50,50,0,["Shovel","Axe"])
-	# print(f"You are starting with {player.starting_dabloon} dabloons. ")
-	return(player)
+        player = Player(username, 50,50,0,["Shovel","Axe"])
+        # print(f"You are starting with {player.starting_dabloon} dabloons. ")
+        return(player)
 
 def controls():
-	global currentloc_y
-	global currentloc_x
-	currentroommove = str("location" + str(currentloc_x) + str(currentloc_y) + ".move")
-	currentroomtakedabloon = str("location" + str(currentloc_x) + str(currentloc_y) + ".takedabloon")
-	currentroomdescribe = str("location" + str(currentloc_x) + str(currentloc_y) + ".decribe")
-	currentroomdebloons = eval(str("location" + str(currentloc_x) + str(currentloc_y) + ".starting_dabloon"))
-	currentroomdig = str("location" + str(currentloc_x) + str(currentloc_y) + ".dig")
+        global currentloc_y
+        global currentloc_x
+        currentroommove = str("location" + str(currentloc_x) + str(currentloc_y) + ".move")
+        currentroomtakedabloon = str("location" + str(currentloc_x) + str(currentloc_y) + ".takedabloon")
+        currentroomdescribe = str("location" + str(currentloc_x) + str(currentloc_y) + ".decribe")
+        currentroomdebloons = eval(str("location" + str(currentloc_x) + str(currentloc_y) + ".starting_dabloon"))
+        currentroomdig = str("location" + str(currentloc_x) + str(currentloc_y) + ".dig")
+        currentroomadddabloon = str("location" + str(currentloc_x) + str(currentloc_y) + ".adddabloon")
+        
 
-	print("")
-	print(eval(currentroomdescribe))
-	print(f"This room has {currentroomdebloons} dabloons in it.")
-	if debug == 1:print(f"debug: {currentloc_x, currentloc_y}")
-	control=input('? ')
-	control=control.lower()
+        print("")
+        print(eval(currentroomdescribe))
+        print(f"This room has {currentroomdebloons} dabloons in it.")
+        if debug == 1:print(f"debug: {currentloc_x, currentloc_y}")
+        control=input('? ')
+        control=control.lower()
 
-	if control=="inventory":
-	 	print(f"Current debloon amount is {player.starting_dabloon}. ") 
-	 	print("")
-	 	print(f"Your current items are:")
-	 	print(*player.bag,sep='\n')
-	 	controls()
-	elif control == 'map':
-		print(f'Current location is {currentloc_x, currentloc_y}.')
-		showmap()
-		controls()
-	elif control == "up": 
-		newcurrentloc_y = eval(currentroommove)('N', currentloc_y) 
-		currentloc_y = newcurrentloc_y
-		controls()
-	elif control == "down": 
-		newcurrentloc_y = eval(currentroommove)('S', currentloc_y) 
-		currentloc_y = newcurrentloc_y
-		controls()	
-	elif control == "left": 
-		newcurrentloc_x = eval(currentroommove)('E', currentloc_x) 
-		currentloc_x = newcurrentloc_x
-		controls()	
-	elif control == "right": 
-		newcurrentloc_x = eval(currentroommove)('W', currentloc_x) 
-		currentloc_x = newcurrentloc_x
-		controls()		
-	elif control=='take dabloon':
-		dabloonstoadd = eval(currentroomtakedabloon)(1)
-		player.adddabloon(dabloonstoadd)
-		controls()
-	elif control=='dig':
-		prize = eval(currentroomdig)()
-		player.addprize(prize)
-		controls()
+        if control=="inventory":
+                print(f"Current debloon amount is {player.starting_dabloon}. ") 
+                print("")
+                print(f"Your current items are:")
+                print(*player.bag,sep='\n')
+                controls()
+        elif control == 'map':
+                print(f'Current location is {currentloc_x, currentloc_y}.')
+                showmap()
+                controls()
+        elif control == "up": 
+                newcurrentloc_y = eval(currentroommove)('N', currentloc_y) 
+                currentloc_y = newcurrentloc_y
+                controls()
+        elif control == "down": 
+                newcurrentloc_y = eval(currentroommove)('S', currentloc_y) 
+                currentloc_y = newcurrentloc_y
+                controls()      
+        elif control == "left": 
+                newcurrentloc_x = eval(currentroommove)('E', currentloc_x) 
+                currentloc_x = newcurrentloc_x
+                controls()      
+        elif control == "right": 
+                newcurrentloc_x = eval(currentroommove)('W', currentloc_x) 
+                currentloc_x = newcurrentloc_x
+                controls()              
+        elif control=='take dabloon':
+                amount = input(f'This room contains {currentroomdebloons}, How many do you want to take? ')
+                if checkdablooninput(amount):
+                        amount = int(amount)
+                else:
+                        print('That is not a number, please retry')
+                        controls()
+                dabloonstoadd = eval(currentroomtakedabloon)(amount)
+                player.adddabloon(dabloonstoadd)
+                controls()
+        elif control=='dig':
+                prize = eval(currentroomdig)()
+                player.addprize(prize)
+                controls()
 
-	elif control=='help':
-		print("")
-		print("Commonly used commands")
-		print("'Inventory' - shows you your items bought and dablooons found") 
-		print("'Map' -  a map that gives you your x and y coordinates")
-		print("'Take Dabloon' - picks up or recieves dabloons gived")
-		print("'Give Dabloon' - gives dabloon away to buy items")
-		print("'Up' - moves player up") 
-		print("'Down' -  moves player down")
-		print("'Left' - moves player left")
-		print("'Right' - moves player right")	
-		print("'Dig' - dig for something")
-		print("'Help' - shows player list of commands")
-		controls()
-	
-	elif control=='give dabloon':
-		player.takedabloon(10)
-		controls()
-	
-	else:
-		print("")
-		print("This is not a valid command!")
-		controls()
+        elif control=='help':
+                print("")
+                print("Commonly used commands")
+                print("'Inventory' - shows you your items bought and dablooons found") 
+                print("'Map' -  a map that gives you your x and y coordinates")
+                print("'Take Dabloon' - picks up or recieves dabloons gived")
+                print("'Give Dabloon' - gives dabloon away to buy items")
+                print("'Up' - moves player up") 
+                print("'Down' -  moves player down")
+                print("'Left' - moves player left")
+                print("'Right' - moves player right")   
+                print("'Dig' - dig for something")
+                print("'Help' - shows player list of commands")
+                controls()
+        
+        elif control=='give dabloon':
+                amount = input(f'You have {player.starting_dabloon}, How many do you want to give? ')
+                if checkdablooninput(amount):
+                        amount = int(amount)
+                else:
+                        print('That is not a number, please retry')
+                        controls()
+                amountreturned = player.takedabloon(amount)
+                givedabloon = eval(currentroomadddabloon)(amountreturned) 
+                controls()
+        
+        else:
+                print("")
+                print("This is not a valid command!")
+                controls()
 
 def peacefulgame():
-	print("If you want to learn more about the game controls, please type 'Help'")
-	print("---")
-	controls()
+        print("If you want to learn more about the game controls, please type 'Help'")
+        print("---")
+        controls()
 
 def showmap():
-	print("45 46 47 48 49 50 51 52 53 54 55")
-	print("53")
-	print("52")
-	print("51             []")
-	print("50          [] [] []")
-	print("49             []")
-	print("48             []")
-	print("47             []")
-	print("46             []")
-	print("45")
+        print("45 46 47 48 49 50 51 52 53 54 55")
+        print("53")
+        print("52")
+        print("51             []")
+        print("50          [] [] []")
+        print("49             []")
+        print("48             []")
+        print("47             []")
+        print("46             []")
+        print("45")
 
+def checkdablooninput(input_str):
+        if input_str.strip().isdigit():
+                return True
+        else:
+                return False
 #all functions defined above this line
 clear()
 print('Hello user! Welcome to the game.')
