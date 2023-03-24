@@ -332,7 +332,7 @@ location5348=Location('The surronding area is stunningly gorgeous. Sea coral and
 location5448=Location('A mermaid swims up to you as you float closer to the magical castle in the far distance.',54,48,0, 1, 1, 1, 0,"no",0,1,['talktoher','swimaway'],['Talk to the mermaid', 'Swim away towards the bustling market.'])
 player = createplayer()
 shopkeep = npc('*******', 46, 50, 0, [],['rabbit', 'frog', 'snake', 'dog', 'cat'])
-shopkeep2 = npc('REDACTED',52,52, 0, [],['get a translator', 'have a beer', 'have a place to stay the night'])
+shopkeep2 = npc('REDACTED',52,52, 0, [],['get a translator', 'have a beer', 'have a place to stay the night', 'get directions to CENSORED'])
 shopkeep3 = npc('CENSORED',56,54, 0, [],['grappling hook', 'moutain boots', 'dragon gear', 'mountain jacket', 'food rations'])
 if debug ==1:print(shopkeep.pets)
 startingscreen()
